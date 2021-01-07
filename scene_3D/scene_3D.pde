@@ -1,20 +1,40 @@
+import java.awt.Robot;
+
+Robot rbt;
+
 //camera variables
 float eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz;
 
+//keyboard variables
 boolean wkey, akey, skey, dkey;
 
+//rotation varables
+float leftRightAngle, upDownAngle;
+
+
 void setup() {
-  size(800, 800, P3D);
+  size(displayWidth, displayHeight, P3D);
+  
+  try {
+    rbt = new Robot();
+  }
+  catch(Exception e) {
+    e.printStackTrace();
+  }
   
   eyex = width/2;
   eyey = height/2;
   eyez = height/2;
+  
   focusx = width/2;
   focusy = height/2;
   focusz = height/2 - 100;
+  
   upx = 0;
   upy = 1;
   upz = 0;
+  
+  leftRightAngle = 3*PI/2;
 }
 
 void draw() {
@@ -40,8 +60,19 @@ void move() {
   if (akey) eyex -= 10;
   if (skey) eyez += 10;
   if (wkey) eyez -= 10;
-  focusx = eyex;
-  focusz = eyez - 100;
+  
+  focusx = eyex + cos(leftRightAngle)*100;
+  focusy = eyey + tan(upDownAngle)*100;
+  focusz = eyez + sin(leftRightAngle)*100;
+  
+  leftRightAngle += (mouseX - pmouseX)*0.01;
+  upDownAngle += (mouseY - pmouseY)*0.01;
+  
+  if (upDownAngle > radians(85)) upDownAngle = radians(85);
+  if (upDownAngle < -radians(85)) upDownAngle = -radians(85);
+  
+  if (mouseX > width-2) rbt.mouseMove(3, mouseY);
+  if (mouseX < 2) rbt.mouseMove(width - 3, mouseY);
 }
 
 void drawAxis() {
