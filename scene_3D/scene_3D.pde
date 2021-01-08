@@ -56,15 +56,27 @@ void move() {
   sphere(3);
   popMatrix();
   
-  if (dkey) eyex += 10;
-  if (akey) eyex -= 10;
-  if (skey) eyez += 10;
-  if (wkey) eyez -= 10;
+  if (wkey) {
+    eyex += cos(leftRightAngle)*10;
+    eyez += sin(leftRightAngle)*10;
+  }
+  if (skey) {
+    eyex -= cos(leftRightAngle)*10;
+    eyez -= sin(leftRightAngle)*10;
+  }
+  if (dkey) {
+    eyex += cos(leftRightAngle + PI/2)*10;
+    eyez += sin(leftRightAngle + PI/2)*10;
+  }
+  if (akey) {
+    eyex -= cos(leftRightAngle + PI/2)*10;
+    eyez -= sin(leftRightAngle + PI/2)*10;
+  }
   
   focusx = eyex + cos(leftRightAngle)*100;
   focusy = eyey + tan(upDownAngle)*100;
   focusz = eyez + sin(leftRightAngle)*100;
-  
+
   leftRightAngle += (mouseX - pmouseX)*0.01;
   upDownAngle += (mouseY - pmouseY)*0.01;
   
