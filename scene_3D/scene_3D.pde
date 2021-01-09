@@ -2,6 +2,8 @@ import java.awt.Robot;
 
 Robot rbt;
 
+int sceneSize;
+
 //camera variables
 float eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz;
 
@@ -11,9 +13,12 @@ boolean wkey, akey, skey, dkey;
 //rotation varables
 float leftRightAngle, upDownAngle;
 
+ArrayList<Snowflake> snowList;
+
 
 void setup() {
   size(displayWidth, displayHeight, P3D);
+  sceneSize = 2000;
   
   try {
     rbt = new Robot();
@@ -35,6 +40,11 @@ void setup() {
   upz = 0;
   
   leftRightAngle = 3*PI/2;
+  
+  snowList = new ArrayList<Snowflake>();
+  for (int i = 0 ; i < 100; i++) {
+    snowList.add( new Snowflake() );
+  }
 }
 
 void draw() {
@@ -45,8 +55,14 @@ void draw() {
   move();
   
   drawAxis();
-  drawFloor(-2000, 2000, height, 100);
-  drawFloor(-2000, 2000, 0, 100);
+  drawFloor(-sceneSize, sceneSize, height, 100);
+  drawFloor(-sceneSize, sceneSize, 0, 100);
+  
+  for (int i = 0 ; i < 100; i++) {
+    Snowflake mySnowflake = snowList.get(i);
+    mySnowflake.act();
+    mySnowflake.show();
+  }  
 }
 
 void move() {
@@ -91,13 +107,13 @@ void drawAxis() {
   strokeWeight(2);
   //x-axis
   stroke(255, 0, 0);
-  line(-2000, 0, 0, 2000, 0, 0);
+  line(-sceneSize, 0, 0, sceneSize, 0, 0);
   //y-axis
   stroke(0, 255, 0);
   line(0, 0, 0, 0, height, 0);
   //z-axis
   stroke(0, 0, 255);
-  line(0, 0, -2000, 0, 0, 2000);
+  line(0, 0, -sceneSize, 0, 0, sceneSize);
 }
 
 void drawFloor(int start, int end, int level, int gap) {
@@ -123,3 +139,11 @@ void keyReleased() {
   if (key == 's' || key == 'S') skey = false;
   if (key == 'd' || key == 'D') dkey = false;
 }
+
+/* 
+random ideas:
+- changing weather
+    - from rain, snow, clear
+    - have background color change with weather
+- randomly generated lakes or trees
+*/
