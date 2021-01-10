@@ -13,12 +13,36 @@ boolean wkey, akey, skey, dkey;
 //rotation varables
 float leftRightAngle, upDownAngle;
 
+//textures
+PImage diamond, dirt, grassSide, grass, oakLeaves, oakLogSide, oakLog, sand;
+ArrayList<PImage> gif;
+
 ArrayList<Snowflake> snowList;
+Block blockA, blockB;
 
 
 void setup() {
   size(displayWidth, displayHeight, P3D);
   sceneSize = 2000;
+  textureMode(NORMAL);
+  
+  gif = new ArrayList<PImage>();
+  String gifDir = "Water";
+  File dataDir = new File(sketchPath() + "/data/" + gifDir); 
+  File[] files = dataDir.listFiles();
+  for (File file : files) { 
+    PImage frame = loadImage(gifDir + "/" + file.getName());
+    gif.add(frame);
+  }
+  
+  diamond = loadImage("Diamond.png");
+  dirt = loadImage("Dirt_(texture)_JE2_BE2.png");
+  grass = loadImage("Grass_Block_Top.png");
+  grassSide = loadImage("Grass_Block_Side.png");
+  oakLeaves = loadImage("Oak_Leaves.png");
+  oakLogSide = loadImage("Oak_Log_Side.png");
+  oakLog = loadImage("Oak_Log_Top.png");
+  sand = loadImage("Sand.png");
   
   try {
     rbt = new Robot();
@@ -41,10 +65,14 @@ void setup() {
   
   leftRightAngle = 3*PI/2;
   
+  rbt.mouseMove(width/2, height/2);
+  
   snowList = new ArrayList<Snowflake>();
   for (int i = 0 ; i < 100; i++) {
     snowList.add( new Snowflake() );
   }
+  blockA = new Leaves(0, height, 0);
+  blockB = new Wood(100, height, 0);
 }
 
 void draw() {
@@ -63,6 +91,9 @@ void draw() {
     mySnowflake.act();
     mySnowflake.show();
   }  
+  blockA.show();
+  blockB.show();
+  
 }
 
 void move() {
