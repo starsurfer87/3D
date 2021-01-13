@@ -50,7 +50,7 @@ void setup() {
   
   diamond = loadImage("Diamond.png");
   dirt = loadImage("Dirt_(texture)_JE2_BE2.png");
-  grass = loadImage("Grass_Block_Top.png");
+  grass = loadImage("Grass_Block_Top_C.png");
   grassSide = loadImage("Grass_Block_Side.png");
   oakLeaves = loadImage("Oak_Leaves.png");
   oakLogSide = loadImage("Oak_Log_Side.png");
