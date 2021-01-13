@@ -84,6 +84,15 @@ class Grass extends Block {
     
 }
 
+class Dirt extends Block {
+  
+  Dirt(float x, float y, float z) {
+    super(x, y, z);
+    top = side = bottom = dirt;
+  }
+    
+}
+
 class Leaves extends Block {
   
   Leaves(float x, float y, float z) {

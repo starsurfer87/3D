@@ -21,11 +21,14 @@ PImage diamond, dirt, grassSide, grass, oakLeaves, oakLogSide, oakLog, sand;
 ArrayList<PImage> gif;
 
 //color palette
-color white = #FFFFFF;
+color black = #000000;
+color blue = #0000FF;
+color green = #00FF00;
+color yellow = #FFFF00;
 
 
 ArrayList<Snowflake> snowList;
-Block blockA, blockB;
+ArrayList<Block> blockList;
 
 
 void setup() {
@@ -34,7 +37,7 @@ void setup() {
   
   sceneSize = 2000;
   gridSize = 100;
-  map = loadImage("map.png");
+  map = loadImage("map3.png");
   
   gif = new ArrayList<PImage>();
   String gifDir = "Water";
@@ -81,8 +84,9 @@ void setup() {
   for (int i = 0 ; i < 100; i++) {
     snowList.add( new Snowflake() );
   }
-  blockA = new Leaves(0, height, 0);
-  blockB = new Wood(100, height, 0);
+  blockList = new ArrayList<Block>();
+  
+  drawMap();
 }
 
 void draw() {
@@ -95,15 +99,13 @@ void draw() {
   drawAxis();
   drawFloor(-sceneSize, sceneSize, height, gridSize);
   drawFloor(-sceneSize, sceneSize, 0, gridSize);
-  drawMap();
+  showMap();
   
   for (int i = 0 ; i < 100; i++) {
     Snowflake mySnowflake = snowList.get(i);
     mySnowflake.act();
     mySnowflake.show();
-  }  
-  blockA.show();
-  blockB.show();
+  } 
   
 }
 
@@ -172,16 +174,25 @@ void drawMap() {
   for (int x = 0; x < map.width; x++) {
     for (int y = 0; y < map.height; y++) {
       color c = map.get(x, y);
-      if (c != white) {
-        pushMatrix();
-        fill(c);
-        stroke(100);
-        translate(x*gridSize - sceneSize, height/2, y*gridSize - sceneSize);
-        box(gridSize, height, gridSize);
-        popMatrix();
+      if (c == blue) {
+        blockList.add(new Water(x*gridSize - sceneSize, height, y*gridSize - sceneSize));
+      } else if (c == yellow) {
+        blockList.add(new Sand(x*gridSize - sceneSize, height, y*gridSize - sceneSize));
+      } else if (c == black) {
+        blockList.add(new Dirt(x*gridSize - sceneSize, height, y*gridSize - sceneSize));
+        blockList.add(new Grass(x*gridSize - sceneSize, height - 100, y*gridSize - sceneSize));
+      } else {
+        blockList.add(new Grass(x*gridSize - sceneSize, height, y*gridSize - sceneSize));
       }
     }
   }
+}
+
+void showMap() {
+    for (int i = 0 ; i < blockList.size(); i++) {
+    Block b = blockList.get(i);
+    b.show();
+  } 
 }
 
 void keyPressed() {
