@@ -2,7 +2,10 @@ import java.awt.Robot;
 
 Robot rbt;
 
+//map variables
 int sceneSize;
+int gridSize;
+PImage map;
 
 //camera variables
 float eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz;
@@ -17,14 +20,21 @@ float leftRightAngle, upDownAngle;
 PImage diamond, dirt, grassSide, grass, oakLeaves, oakLogSide, oakLog, sand;
 ArrayList<PImage> gif;
 
+//color palette
+color white = #FFFFFF;
+
+
 ArrayList<Snowflake> snowList;
 Block blockA, blockB;
 
 
 void setup() {
   size(displayWidth, displayHeight, P3D);
-  sceneSize = 2000;
   textureMode(NORMAL);
+  
+  sceneSize = 2000;
+  gridSize = 100;
+  map = loadImage("map.png");
   
   gif = new ArrayList<PImage>();
   String gifDir = "Water";
@@ -83,8 +93,9 @@ void draw() {
   move();
   
   drawAxis();
-  drawFloor(-sceneSize, sceneSize, height, 100);
-  drawFloor(-sceneSize, sceneSize, 0, 100);
+  drawFloor(-sceneSize, sceneSize, height, gridSize);
+  drawFloor(-sceneSize, sceneSize, 0, gridSize);
+  drawMap();
   
   for (int i = 0 ; i < 100; i++) {
     Snowflake mySnowflake = snowList.get(i);
@@ -154,6 +165,22 @@ void drawFloor(int start, int end, int level, int gap) {
   for (int i = start; i <= end; i += gap) {
     line(i, level, start, i, level, end);
     line(start, level, i, end, level, i);
+  }
+}
+
+void drawMap() {
+  for (int x = 0; x < map.width; x++) {
+    for (int y = 0; y < map.height; y++) {
+      color c = map.get(x, y);
+      if (c != white) {
+        pushMatrix();
+        fill(c);
+        stroke(100);
+        translate(x*gridSize - sceneSize, height/2, y*gridSize - sceneSize);
+        box(gridSize, height, gridSize);
+        popMatrix();
+      }
+    }
   }
 }
 
