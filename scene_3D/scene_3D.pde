@@ -17,13 +17,16 @@ boolean wkey, akey, skey, dkey;
 float leftRightAngle, upDownAngle;
 
 //textures
-PImage diamond, dirt, grassSide, grass, oakLeaves, oakLogSide, oakLog, sand;
+PImage diamond, dirt, grassSide, grass, oakLeaves, oakLogSide, oakLog, sand, stone;
 ArrayList<PImage> gif;
 
 //color palette
 color black = #000000;
+color white = #FFFFFF;
 color blue = #0000FF;
-color green = #00FF00;
+color lightGreen = #B5E61D;
+color darkGreen = #22B14C;
+color brown = #804000;
 color yellow = #FFFF00;
 
 
@@ -37,7 +40,7 @@ void setup() {
   
   sceneSize = 2000;
   gridSize = 100;
-  map = loadImage("map3.png");
+  map = loadImage("map4.png");
   
   gif = new ArrayList<PImage>();
   String gifDir = "Water";
@@ -56,6 +59,7 @@ void setup() {
   oakLogSide = loadImage("Oak_Log_Side.png");
   oakLog = loadImage("Oak_Log_Top.png");
   sand = loadImage("Sand.png");
+  stone = loadImage("Stone_Bricks.png");
   
   try {
     rbt = new Robot();
@@ -65,7 +69,7 @@ void setup() {
   }
   
   eyex = width/2;
-  eyey = height/2;
+  eyey = 8*height/10;
   eyez = height/2;
   
   focusx = width/2;
@@ -86,11 +90,13 @@ void setup() {
   }
   blockList = new ArrayList<Block>();
   
-  drawMap();
+  generateMap();
 }
 
 void draw() {
   background(0);
+  //ambientLight(255, 255, 255, 0, 0, 0);
+  //directionalLight(251, 252, 232, -1, 2, -1);
   
   camera(eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz);
   
@@ -145,54 +151,6 @@ void move() {
   
   if (mouseX > width-2) rbt.mouseMove(3, mouseY);
   if (mouseX < 2) rbt.mouseMove(width - 3, mouseY);
-}
-
-void drawAxis() {
-  strokeWeight(2);
-  //x-axis
-  stroke(255, 0, 0);
-  line(-sceneSize, 0, 0, sceneSize, 0, 0);
-  //y-axis
-  stroke(0, 255, 0);
-  line(0, 0, 0, 0, height, 0);
-  //z-axis
-  stroke(0, 0, 255);
-  line(0, 0, -sceneSize, 0, 0, sceneSize);
-}
-
-void drawFloor(int start, int end, int level, int gap) {
-  //line(x1, y1, z1, x2, y2, z2);
-  stroke(100);
-  strokeWeight(1);
-  for (int i = start; i <= end; i += gap) {
-    line(i, level, start, i, level, end);
-    line(start, level, i, end, level, i);
-  }
-}
-
-void drawMap() {
-  for (int x = 0; x < map.width; x++) {
-    for (int y = 0; y < map.height; y++) {
-      color c = map.get(x, y);
-      if (c == blue) {
-        blockList.add(new Water(x*gridSize - sceneSize, height, y*gridSize - sceneSize));
-      } else if (c == yellow) {
-        blockList.add(new Sand(x*gridSize - sceneSize, height, y*gridSize - sceneSize));
-      } else if (c == black) {
-        blockList.add(new Dirt(x*gridSize - sceneSize, height, y*gridSize - sceneSize));
-        blockList.add(new Grass(x*gridSize - sceneSize, height - 100, y*gridSize - sceneSize));
-      } else {
-        blockList.add(new Grass(x*gridSize - sceneSize, height, y*gridSize - sceneSize));
-      }
-    }
-  }
-}
-
-void showMap() {
-    for (int i = 0 ; i < blockList.size(); i++) {
-    Block b = blockList.get(i);
-    b.show();
-  } 
 }
 
 void keyPressed() {

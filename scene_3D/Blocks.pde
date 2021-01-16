@@ -121,6 +121,15 @@ class Sand extends Block {
     
 }
 
+class Stone extends Block {
+  
+  Stone(float x, float y, float z) {
+    super(x, y, z);
+    top = side = bottom = stone;
+  }
+    
+}
+
 class Water extends Block {
   int f;
   int inc;
