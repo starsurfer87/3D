@@ -66,4 +66,17 @@ void generateTree(int x, int y, int level) {
     //blockList.add(new Wood(x*gridSize - sceneSize, height - (level + i*100), y*gridSize + 100 - sceneSize));
     //blockList.add(new Wood(x*gridSize + 100 - sceneSize, height - (level + i*100), y*gridSize + 100 - sceneSize));
   }
+  for (int leavesx = x-2; leavesx <= x+2; leavesx ++) {
+    for (int leavesy = y-2; leavesy <= y+2; leavesy++) {
+      blockList.add(new Leaves(leavesx*gridSize - sceneSize, height - (level + treeHeight*100), leavesy*gridSize - sceneSize));
+    }
+  }
+  for (int leavesx = x-1; leavesx <= x+1; leavesx ++) {
+    for (int leavesy = y-1; leavesy <= y+1; leavesy++) {
+      blockList.add(new Leaves(leavesx*gridSize - sceneSize, height - (level + (treeHeight+1)*100), leavesy*gridSize - sceneSize));
+    }
+  }
+  blockList.add(new Leaves(x*gridSize - sceneSize, height - (level + (treeHeight+2)*100), y*gridSize - sceneSize));
+  
+  
 }
