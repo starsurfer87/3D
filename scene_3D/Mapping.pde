@@ -62,21 +62,23 @@ void generateTree(int x, int y, int level) {
   int treeHeight = int(random(2, 5));
   for (int i = 0; i < treeHeight; i++) {
     blockList.add(new Wood(x*gridSize - sceneSize, height - (level + i*100), y*gridSize - sceneSize));
-    //blockList.add(new Wood(x*gridSize + 100 - sceneSize, height - (level + i*100), y*gridSize - sceneSize));
-    //blockList.add(new Wood(x*gridSize - sceneSize, height - (level + i*100), y*gridSize + 100 - sceneSize));
-    //blockList.add(new Wood(x*gridSize + 100 - sceneSize, height - (level + i*100), y*gridSize + 100 - sceneSize));
   }
   for (int leavesx = x-2; leavesx <= x+2; leavesx ++) {
     for (int leavesy = y-2; leavesy <= y+2; leavesy++) {
-      blockList.add(new Leaves(leavesx*gridSize - sceneSize, height - (level + treeHeight*100), leavesy*gridSize - sceneSize));
+      if ((leavesx > x-2 && leavesx < x+2 && leavesy > y-2 && leavesy < y+2) || !(leavesx - x == leavesy - y || leavesx - x == -(leavesy - y)) || random(3) < 2) { 
+        //old condition: ((leavesx > x-2 && leavesx < x+2 && leavesy > y-2 && leavesy < y+2) || random(6) < 5)
+        blockList.add(new Leaves(leavesx*gridSize - sceneSize, height - (level + treeHeight*100), leavesy*gridSize - sceneSize));
+      }
     }
   }
   for (int leavesx = x-1; leavesx <= x+1; leavesx ++) {
     for (int leavesy = y-1; leavesy <= y+1; leavesy++) {
+      if ((leavesx == x && leavesy == y) || random(4) < 3) {
       blockList.add(new Leaves(leavesx*gridSize - sceneSize, height - (level + (treeHeight+1)*100), leavesy*gridSize - sceneSize));
+      }
     }
   }
-  blockList.add(new Leaves(x*gridSize - sceneSize, height - (level + (treeHeight+2)*100), y*gridSize - sceneSize));
-  
-  
+  if (random(2) < 1) {
+    blockList.add(new Leaves(x*gridSize - sceneSize, height - (level + (treeHeight+2)*100), y*gridSize - sceneSize));
+  }
 }
