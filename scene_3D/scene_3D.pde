@@ -126,15 +126,15 @@ void move() {
     eyex += cos(leftRightAngle)*10;
     eyez += sin(leftRightAngle)*10;
   }
-  if (skey) {
+  if (skey && canMoveBackward()) {
     eyex -= cos(leftRightAngle)*10;
     eyez -= sin(leftRightAngle)*10;
   }
-  if (dkey) {
+  if (dkey && canMoveRight()) {
     eyex += cos(leftRightAngle + PI/2)*10;
     eyez += sin(leftRightAngle + PI/2)*10;
   }
-  if (akey) {
+  if (akey && canMoveLeft()) {
     eyex -= cos(leftRightAngle + PI/2)*10;
     eyez -= sin(leftRightAngle + PI/2)*10;
   }
@@ -173,38 +173,125 @@ boolean canMoveForward() {
   float maxx, maxy, maxz;
   int mapx, mapy, mapminx, mapminy, mapmaxx, mapmaxy;
   
-  fwdx = eyex + cos(leftRightAngle)*150;
+  fwdx = eyex + cos(leftRightAngle)*200;
   fwdy = eyey;
-  fwdz = eyez + sin(leftRightAngle)*150;
+  fwdz = eyez + sin(leftRightAngle)*200;
   mapx = int(fwdx + 2000) / gridSize;
   mapy = int(fwdz + 2000) / gridSize;
   
-  if (map.get(mapx, mapy) == white) {
-    return true;
-  } else {
-    return false;
-  }
-  
-  /*
-  minx = eyex + cos(leftRightAngle - radians(30))*200;
+  minx = eyex + cos(leftRightAngle - radians(30))*150;
   miny = eyey;
-  minz = eyez + sin(leftRightAngle - radians(30))*200;
+  minz = eyez + sin(leftRightAngle - radians(30))*150;
   mapminx = int(minx + 2000) / gridSize;
   mapminy = int(minz + 2000) / gridSize;
   
-  maxx = eyex + cos(leftRightAngle + radians(30))*200;
+  maxx = eyex + cos(leftRightAngle + radians(30))*150;
   maxy = eyey;
-  maxz = eyez + sin(leftRightAngle + radians(30))*200;
+  maxz = eyez + sin(leftRightAngle + radians(30))*150;
   mapmaxx = int(maxx + 2000) / gridSize;
   mapmaxy = int(maxz + 2000) / gridSize;
   
-  
-  if (map.get(mapx, mapy) == white || map.get(mapminx, mapminy) == white || map.get(mapmaxx, mapmaxy) == white) {
+  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
     return true;
   } else {
     return false;
   }
-  */
+    
+}
+
+boolean canMoveBackward() {
+  float backx, backy, backz;
+  float minx, miny, minz;
+  float maxx, maxy, maxz;
+  int mapx, mapy, mapminx, mapminy, mapmaxx, mapmaxy;
+  
+  backx = eyex - cos(leftRightAngle)*200;
+  backy = eyey;
+  backz = eyez - sin(leftRightAngle)*200;
+  mapx = int(backx + 2000) / gridSize;
+  mapy = int(backz + 2000) / gridSize;
+  
+  minx = eyex - cos(leftRightAngle - radians(30))*200;
+  miny = eyey;
+  minz = eyez - sin(leftRightAngle - radians(30))*200;
+  mapminx = int(minx + 2000) / gridSize;
+  mapminy = int(minz + 2000) / gridSize;
+  
+  maxx = eyex - cos(leftRightAngle + radians(30))*200;
+  maxy = eyey;
+  maxz = eyez - sin(leftRightAngle + radians(30))*200;
+  mapmaxx = int(maxx + 2000) / gridSize;
+  mapmaxy = int(maxz + 2000) / gridSize;
+  
+  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
+    return true;
+  } else {
+    return false;
+  }
+    
+}
+
+boolean canMoveRight() {
+  float rightx, righty, rightz;
+  float minx, miny, minz;
+  float maxx, maxy, maxz;
+  int mapx, mapy, mapminx, mapminy, mapmaxx, mapmaxy;
+  
+  rightx = eyex + cos(leftRightAngle + PI/2)*200;
+  righty = eyey;
+  rightz = eyez + sin(leftRightAngle + PI/2)*200;
+  mapx = int(rightx + 2000) / gridSize;
+  mapy = int(rightz + 2000) / gridSize;
+  
+  minx = eyex + cos(leftRightAngle + PI/2 - radians(30))*200;
+  miny = eyey;
+  minz = eyez + sin(leftRightAngle + PI/2 - radians(30))*200;
+  mapminx = int(minx + 2000) / gridSize;
+  mapminy = int(minz + 2000) / gridSize;
+  
+  maxx = eyex + cos(leftRightAngle + PI/2 + radians(30))*200;
+  maxy = eyey;
+  maxz = eyez + sin(leftRightAngle + PI/2 + radians(30))*200;
+  mapmaxx = int(maxx + 2000) / gridSize;
+  mapmaxy = int(maxz + 2000) / gridSize;
+  
+  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
+    return true;
+  } else {
+    return false;
+  }
+    
+}
+
+boolean canMoveLeft() {
+  float backx, backy, backz;
+  float minx, miny, minz;
+  float maxx, maxy, maxz;
+  int mapx, mapy, mapminx, mapminy, mapmaxx, mapmaxy;
+  
+  backx = eyex - cos(leftRightAngle + PI/2)*200;
+  backy = eyey;
+  backz = eyez - sin(leftRightAngle + PI/2)*200;
+  mapx = int(backx + 2000) / gridSize;
+  mapy = int(backz + 2000) / gridSize;
+  
+  minx = eyex - cos(leftRightAngle + PI/2 - radians(30))*200;
+  miny = eyey;
+  minz = eyez - sin(leftRightAngle + PI/2 - radians(30))*200;
+  mapminx = int(minx + 2000) / gridSize;
+  mapminy = int(minz + 2000) / gridSize;
+  
+  maxx = eyex - cos(leftRightAngle + PI/2 + radians(30))*200;
+  maxy = eyey;
+  maxz = eyez - sin(leftRightAngle + PI/2 + radians(30))*200;
+  mapmaxx = int(maxx + 2000) / gridSize;
+  mapmaxy = int(maxz + 2000) / gridSize;
+  
+  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
+    return true;
+  } else {
+    return false;
+  }
     
 }
 /* 
@@ -213,4 +300,5 @@ random ideas:
     - from rain, snow, clear
     - have background color change with weather
 - randomly generated lakes or trees
+- walking up one block difference
 */
