@@ -122,7 +122,7 @@ void move() {
   sphere(3);
   popMatrix();
   
-  if (wkey) {
+  if (wkey && canMoveForward()) {
     eyex += cos(leftRightAngle)*10;
     eyez += sin(leftRightAngle)*10;
   }
@@ -167,6 +167,46 @@ void keyReleased() {
   if (key == 'd' || key == 'D') dkey = false;
 }
 
+boolean canMoveForward() {
+  float fwdx, fwdy, fwdz;
+  float minx, miny, minz;
+  float maxx, maxy, maxz;
+  int mapx, mapy, mapminx, mapminy, mapmaxx, mapmaxy;
+  
+  fwdx = eyex + cos(leftRightAngle)*150;
+  fwdy = eyey;
+  fwdz = eyez + sin(leftRightAngle)*150;
+  mapx = int(fwdx + 2000) / gridSize;
+  mapy = int(fwdz + 2000) / gridSize;
+  
+  if (map.get(mapx, mapy) == white) {
+    return true;
+  } else {
+    return false;
+  }
+  
+  /*
+  minx = eyex + cos(leftRightAngle - radians(30))*200;
+  miny = eyey;
+  minz = eyez + sin(leftRightAngle - radians(30))*200;
+  mapminx = int(minx + 2000) / gridSize;
+  mapminy = int(minz + 2000) / gridSize;
+  
+  maxx = eyex + cos(leftRightAngle + radians(30))*200;
+  maxy = eyey;
+  maxz = eyez + sin(leftRightAngle + radians(30))*200;
+  mapmaxx = int(maxx + 2000) / gridSize;
+  mapmaxy = int(maxz + 2000) / gridSize;
+  
+  
+  if (map.get(mapx, mapy) == white || map.get(mapminx, mapminy) == white || map.get(mapmaxx, mapmaxy) == white) {
+    return true;
+  } else {
+    return false;
+  }
+  */
+    
+}
 /* 
 random ideas:
 - changing weather
