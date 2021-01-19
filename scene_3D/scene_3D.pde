@@ -95,7 +95,8 @@ void setup() {
 
 void draw() {
   background(0);
-  //ambientLight(255, 255, 255, 0, 0, 0);
+  //lights();
+  ambientLight(251, 252, 232, 2000, 0, 0);
   //directionalLight(251, 252, 232, -1, 2, -1);
   
   camera(eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz);
@@ -103,8 +104,8 @@ void draw() {
   move();
   
   drawAxis();
-  drawFloor(-sceneSize, sceneSize, height, gridSize);
-  drawFloor(-sceneSize, sceneSize, 0, gridSize);
+  //drawFloor(-sceneSize, sceneSize, height, gridSize);
+  //drawFloor(-sceneSize, sceneSize, 0, gridSize);
   showMap();
   
   for (int i = 0 ; i < 100; i++) {
