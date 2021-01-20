@@ -33,6 +33,8 @@ color yellow = #FFFF00;
 ArrayList<Snowflake> snowList;
 ArrayList<Block> blockList;
 
+color[] nonCollisionColors = {white, blue, lightGreen, darkGreen, yellow};
+
 
 void setup() {
   size(displayWidth, displayHeight, P3D);
@@ -102,6 +104,7 @@ void draw() {
   camera(eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz);
   
   move();
+  checkElevation();
   
   drawAxis();
   //drawFloor(-sceneSize, sceneSize, height, gridSize);
@@ -192,7 +195,7 @@ boolean canMoveForward() {
   mapmaxx = int(maxx + 2000) / gridSize;
   mapmaxy = int(maxz + 2000) / gridSize;
   
-  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
+  if (colorsContain(nonCollisionColors, map.get(mapx, mapy)) && colorsContain(nonCollisionColors, map.get(mapminx, mapminy)) && colorsContain(nonCollisionColors, map.get(mapmaxx, mapmaxy))) {
     return true;
   } else {
     return false;
@@ -224,7 +227,7 @@ boolean canMoveBackward() {
   mapmaxx = int(maxx + 2000) / gridSize;
   mapmaxy = int(maxz + 2000) / gridSize;
   
-  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
+  if (colorsContain(nonCollisionColors, map.get(mapx, mapy)) && colorsContain(nonCollisionColors, map.get(mapminx, mapminy)) && colorsContain(nonCollisionColors, map.get(mapmaxx, mapmaxy))) {    
     return true;
   } else {
     return false;
@@ -256,7 +259,7 @@ boolean canMoveRight() {
   mapmaxx = int(maxx + 2000) / gridSize;
   mapmaxy = int(maxz + 2000) / gridSize;
   
-  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
+  if (colorsContain(nonCollisionColors, map.get(mapx, mapy)) && colorsContain(nonCollisionColors, map.get(mapminx, mapminy)) && colorsContain(nonCollisionColors, map.get(mapmaxx, mapmaxy))) {    
     return true;
   } else {
     return false;
@@ -288,12 +291,31 @@ boolean canMoveLeft() {
   mapmaxx = int(maxx + 2000) / gridSize;
   mapmaxy = int(maxz + 2000) / gridSize;
   
-  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
+  if (colorsContain(nonCollisionColors, map.get(mapx, mapy)) && colorsContain(nonCollisionColors, map.get(mapminx, mapminy)) && colorsContain(nonCollisionColors, map.get(mapmaxx, mapmaxy))) {
     return true;
   } else {
     return false;
   }
     
+}
+
+void checkElevation() {
+  int mapx = int(eyex + 2000) / gridSize;
+  int mapy = int(eyez + 2000) / gridSize;
+  if (map.get(mapx, mapy) == blue) eyey = 8*height/10 + 70;
+  if (map.get(mapx, mapy) == white || map.get(mapx, mapy) == yellow) eyey = 8*height/10;
+  if (map.get(mapx, mapy) == lightGreen) eyey = 8*height/10 - 100;
+  if (map.get(mapx, mapy) == darkGreen) eyey = 8*height/10 - 200;
+}
+
+boolean colorsContain(color[] array, color item) {
+  for (color c : array) {
+   if (c == item) {
+     return true;
+    }
+  }
+println(item);
+return false;
 }
 /* 
 random ideas:
