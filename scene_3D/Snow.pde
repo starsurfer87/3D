@@ -6,7 +6,7 @@ class Snowflake {
     x = random(-sceneSize, sceneSize);
     z = random(-sceneSize, sceneSize);
     y = 0;
-    size = random(3,10);
+    size = random(2,5);
     speed = size;
   }
   
