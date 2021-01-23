@@ -19,7 +19,7 @@ class Particle extends GameObject {
     stroke(200, t);
     box(size);
     popMatrix();
-    t -= 3;
+    t -= 7;
   }
   
   void act() {

@@ -33,6 +33,7 @@ ArrayList<GameObject> objects;
 ArrayList<Block> blockList;
 
 color[] nonCollisionColors = {white, blue, lightGreen, darkGreen, yellow};
+HashMap<Integer, Integer> elevations;
 
 int shotTimer, threshold;
 
@@ -96,6 +97,15 @@ void setup() {
   }
   blockList = new ArrayList<Block>();
   
+  elevations = new HashMap<Integer, Integer>();
+  elevations.put(blue, -70);
+  elevations.put(yellow, 0);
+  elevations.put(white, 0);
+  elevations.put(lightGreen, 100);
+  elevations.put(darkGreen, 200);
+  elevations.put(brown, 500);
+  elevations.put(black, 400);
+  
   generateMap();
 }
 
@@ -132,7 +142,7 @@ void draw() {
     shotTimer = 0;
   }
   shotTimer ++;
-
+  println(objects.size());
 }
 
 

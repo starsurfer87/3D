@@ -17,13 +17,18 @@ class Bullet extends GameObject {
     
     int hitx = int(loc.x + 2000) / gridSize;
     int hity = int(loc.z + 2000) / gridSize;
-    if (map.get(hitx, hity) == white) {
-      loc.add(dir);
-    } else {
-      lives = 0;
-      for (int i = 0; i < 5; i++) {
-        objects.add(new Particle(loc));
+    try {
+      color c = map.get(hitx, hity);
+      if (loc.y <= 8*height/10 - elevations.get(c) + 100) {
+        loc.add(dir);
+      } else {
+        lives = 0;
+        for (int i = 0; i < 5; i++) {
+          objects.add(new Particle(loc));
+        }
       }
+    } catch(Exception ex) {
+      lives = 0;
     }
   }
 }
