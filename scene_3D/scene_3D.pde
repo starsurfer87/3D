@@ -30,7 +30,6 @@ color brown = #804000;
 color yellow = #FFFF00;
 
 ArrayList<GameObject> objects;
-ArrayList<Snowflake> snowList;
 ArrayList<Block> blockList;
 
 color[] nonCollisionColors = {white, blue, lightGreen, darkGreen, yellow};
@@ -92,9 +91,8 @@ void setup() {
   threshold = 30;
   
   objects = new ArrayList<GameObject>();
-  snowList = new ArrayList<Snowflake>();
   for (int i = 0 ; i < 100; i++) {
-    snowList.add( new Snowflake() );
+    objects.add( new Snowflake() );
   }
   blockList = new ArrayList<Block>();
   
@@ -128,14 +126,6 @@ void draw() {
       i++;
     }
   }
-  
-  /*
-  for (int n = 0 ; n < 100; n++) {
-    Snowflake mySnowflake = snowList.get(n);
-    mySnowflake.act();
-    mySnowflake.show();
-  } 
-  */
   
   if (spacekey && shotTimer > threshold) {
     objects.add(new Bullet());

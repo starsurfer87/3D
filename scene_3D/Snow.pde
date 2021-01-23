@@ -1,30 +1,20 @@
-class Snowflake {
+class Snowflake extends GameObject {
   
-  float x, y, z, size, speed;
+  float speed;
   
   Snowflake() {
-    x = random(-sceneSize, sceneSize);
-    z = random(-sceneSize, sceneSize);
-    y = 0;
+    loc = new PVector (random(-sceneSize, sceneSize), 0, random(-sceneSize, sceneSize));
     size = random(2,5);
-    speed = size;
+    lives = 1;
+    speed = size + 3;
   }
   
   void act() {
-    y += speed;
-    if (y > height) {
-      y = 0;
-      x = random(-sceneSize, sceneSize);
+    loc.y += speed;
+    if (loc.y > height) {
+      loc.y = 0;
+      loc.x = random(-sceneSize, sceneSize);
     }
-  }
-  
-  void show() {
-     pushMatrix(); 
-     translate(x, y, z);
-     fill(255);
-     stroke(255);
-     box(size); 
-     popMatrix();
   }
 
 }
