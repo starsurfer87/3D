@@ -29,6 +29,10 @@ color darkGreen = #22B14C;
 color brown = #804000;
 color yellow = #FFFF00;
 
+//canvases
+PGraphics world;
+PGraphics HUD;
+
 ArrayList<GameObject> objects;
 ArrayList<Block> blockList;
 
@@ -39,8 +43,9 @@ int shotTimer, threshold;
 
 
 void setup() {
-  size(displayWidth, displayHeight, P3D);
-  textureMode(NORMAL);
+  size(displayWidth, displayHeight, P2D);
+  world = createGraphics(width, height, P3D);
+  HUD = createGraphics(width, height, P2D);
   
   sceneSize = 2000;
   gridSize = 100;
@@ -110,12 +115,14 @@ void setup() {
 }
 
 void draw() {
-  background(0);
-  //lights();
-  ambientLight(251, 252, 232, 2000, 0, 0);
-  //directionalLight(251, 252, 232, -1, 2, -1);
+  world.beginDraw();
+  world.textureMode(NORMAL);
+  world.background(0);
+  //world.lights();
+  world.ambientLight(251, 252, 232, 2000, 0, 0);
+  //world.directionalLight(251, 252, 232, -1, 2, -1);
   
-  camera(eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz);
+  world.camera(eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz);
   
   move();
   checkElevation();
@@ -143,6 +150,16 @@ void draw() {
   }
   shotTimer ++;
   println(objects.size());
+  
+  world.endDraw();
+  image(world, 0, 0);
+  
+  HUD.beginDraw();
+  HUD.clear();
+  crosshair();
+  miniMap(50, 50);
+  HUD.endDraw();
+  image(HUD, 0, 0);
 }
 
 

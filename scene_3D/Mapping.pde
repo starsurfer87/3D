@@ -1,23 +1,23 @@
 void drawAxis() {
-  strokeWeight(2);
+  world.strokeWeight(2);
   //x-axis
-  stroke(255, 0, 0);
-  line(-sceneSize, 0, 0, sceneSize, 0, 0);
+  world.stroke(255, 0, 0);
+  world.line(-sceneSize, 0, 0, sceneSize, 0, 0);
   //y-axis
-  stroke(0, 255, 0);
-  line(0, 0, 0, 0, height, 0);
+  world.stroke(0, 255, 0);
+  world.line(0, 0, 0, 0, height, 0);
   //z-axis
-  stroke(0, 0, 255);
-  line(0, 0, -sceneSize, 0, 0, sceneSize);
+  world.stroke(0, 0, 255);
+  world.line(0, 0, -sceneSize, 0, 0, sceneSize);
 }
 
 void drawFloor(int start, int end, int level, int gap) {
   //line(x1, y1, z1, x2, y2, z2);
-  stroke(100);
-  strokeWeight(1);
+  world.stroke(100);
+  world.strokeWeight(1);
   for (int i = start; i <= end; i += gap) {
-    line(i, level, start, i, level, end);
-    line(start, level, i, end, level, i);
+    world.line(i, level, start, i, level, end);
+    world.line(start, level, i, end, level, i);
   }
 }
 
