@@ -201,11 +201,20 @@ void checkElevation() {
   mapmaxx = int(maxx + 2000) / gridSize;
   mapmaxy = int(maxz + 2000) / gridSize;
   
-  if (map.get(mapx, mapy) == blue || map.get(mapminx, mapminy) == blue || map.get(mapmaxx, mapmaxy) == blue) eyey = 8*height/10 + 70;
+  if (map.get(mapx, mapy) == blue || map.get(mapminx, mapminy) == blue || map.get(mapmaxx, mapmaxy) == blue) jump(8*height/10 + 70);
   if (map.get(mapx, mapy) == white || map.get(mapx, mapy) == yellow || map.get(mapminx, mapminy) == white || map.get(mapminx, mapminy) == yellow 
-  || map.get(mapmaxx, mapmaxy) == white || map.get(mapmaxx, mapmaxy) == yellow) eyey = 8*height/10;
-  if (map.get(mapx, mapy) == lightGreen || map.get(mapminx, mapminy) == lightGreen || map.get(mapmaxx, mapmaxy) == lightGreen) eyey = 8*height/10 - 100;
-  if (map.get(mapx, mapy) == darkGreen || map.get(mapminx, mapminy) == darkGreen || map.get(mapmaxx, mapmaxy) == darkGreen) eyey = 8*height/10 - 200;
+  || map.get(mapmaxx, mapmaxy) == white || map.get(mapmaxx, mapmaxy) == yellow) jump(8*height/10);
+  if (map.get(mapx, mapy) == lightGreen || map.get(mapminx, mapminy) == lightGreen || map.get(mapmaxx, mapmaxy) == lightGreen) jump(8*height/10 - 100);
+  if (map.get(mapx, mapy) == darkGreen || map.get(mapminx, mapminy) == darkGreen || map.get(mapmaxx, mapmaxy) == darkGreen) jump(8*height/10 - 200);
+}
+
+void jump(float level) {
+  if (eyey < level) {
+    while (eyey < level - 1) eyey += 1;
+  } else if (eyey > level) {
+    while (eyey > level + 1) eyey -= 1;
+  }
+  eyey = level;
 }
 
 boolean colorsContain(color[] array, color item) {

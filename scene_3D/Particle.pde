@@ -3,10 +3,12 @@ class Particle extends GameObject {
   int t; //transparency
   PVector vel;
   
-  Particle(PVector startLoc) {
+  Particle(PVector startLoc, PVector startDir) {
     loc = startLoc.copy();
-    vel = new PVector(random(10, 15), 0, 0);
-    vel.rotate(radians(random(360)));
+    vel = startDir.copy();
+    vel.mult(-1);
+    vel.add(random(-30, 30), random(-30, 30), random(-30, 30));
+    vel.setMag(random(5, 10));
     size = 10;
     lives = 1;
     t = 255;

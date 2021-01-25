@@ -5,7 +5,7 @@ Robot rbt;
 //map variables
 int sceneSize;
 int gridSize;
-PImage map;
+PImage map, hrMap;
 
 //camera variables
 float eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz;
@@ -50,6 +50,7 @@ void setup() {
   sceneSize = 2000;
   gridSize = 100;
   map = loadImage("map4.png");
+  hrMap = loadImage("map5.png");
   
   gif = new ArrayList<PImage>();
   String gifDir = "Water";
@@ -127,7 +128,7 @@ void draw() {
   move();
   checkElevation();
   
-  drawAxis();
+  //drawAxis();
   //drawFloor(-sceneSize, sceneSize, height, gridSize);
   //drawFloor(-sceneSize, sceneSize, 0, gridSize);
   showMap();
@@ -168,6 +169,11 @@ random ideas:
 - changing weather
     - from rain, snow, clear
     - have background color change with weather
-- randomly generated lakes or trees
-- walking up one block difference
+- improve changing elevation
+- improve particle generation
+- improve map
+- splashes when moving in water
+- play more with lighting
+- checkout noise function
+- object-oriented grass or flowers
 */
