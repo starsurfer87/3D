@@ -8,18 +8,22 @@ void move() {
   if (wkey && canMoveForward()) {
     eyex += cos(leftRightAngle)*10;
     eyez += sin(leftRightAngle)*10;
+    checkElevation();
   }
   if (skey && canMoveBackward()) {
     eyex -= cos(leftRightAngle)*10;
     eyez -= sin(leftRightAngle)*10;
+    checkElevation();
   }
   if (dkey && canMoveRight()) {
     eyex += cos(leftRightAngle + PI/2)*10;
     eyez += sin(leftRightAngle + PI/2)*10;
+    checkElevation();
   }
   if (akey && canMoveLeft()) {
     eyex -= cos(leftRightAngle + PI/2)*10;
     eyez -= sin(leftRightAngle + PI/2)*10;
+    checkElevation();
   }
   
   focusx = eyex + cos(leftRightAngle)*100;
@@ -32,8 +36,15 @@ void move() {
   if (upDownAngle > radians(85)) upDownAngle = radians(85);
   if (upDownAngle < -radians(85)) upDownAngle = -radians(85);
   
-  if (mouseX > width-2) rbt.mouseMove(3, mouseY);
-  if (mouseX < 2) rbt.mouseMove(width - 3, mouseY);
+  if (frameCount < 2) {
+    rbt.mouseMove(width/2, height/2);
+  }
+  
+  if (mouseX < 1) {
+    rbt.mouseMove(width-2, mouseY);
+  } else if (mouseX > width-2) {
+    rbt.mouseMove(1, mouseY);
+  } 
 }
 
 void keyPressed() {
@@ -177,44 +188,34 @@ boolean canMoveLeft() {
   } else {
     return false;
   }
-    
+  
 }
 
 void checkElevation() {
-  float fwdx, fwdz;
-  float minx, minz;
-  float maxx, maxz;
-  int mapx, mapy, mapminx, mapminy, mapmaxx, mapmaxy;
-  
-  fwdx = eyex + cos(leftRightAngle)*200;
-  fwdz = eyez + sin(leftRightAngle)*200;
-  mapx = int(fwdx + 2000) / gridSize;
-  mapy = int(fwdz + 2000) / gridSize;
-  
-  minx = eyex + cos(leftRightAngle - radians(30))*150;
-  minz = eyez + sin(leftRightAngle - radians(30))*150;
-  mapminx = int(minx + 2000) / gridSize;
-  mapminy = int(minz + 2000) / gridSize;
-  
-  maxx = eyex + cos(leftRightAngle + radians(30))*150;
-  maxz = eyez + sin(leftRightAngle + radians(30))*150;
-  mapmaxx = int(maxx + 2000) / gridSize;
-  mapmaxy = int(maxz + 2000) / gridSize;
-  
-  if (map.get(mapx, mapy) == blue || map.get(mapminx, mapminy) == blue || map.get(mapmaxx, mapmaxy) == blue) jump(8*height/10 + 70);
-  if (map.get(mapx, mapy) == white || map.get(mapx, mapy) == yellow || map.get(mapminx, mapminy) == white || map.get(mapminx, mapminy) == yellow 
-  || map.get(mapmaxx, mapmaxy) == white || map.get(mapmaxx, mapmaxy) == yellow) jump(8*height/10);
-  if (map.get(mapx, mapy) == lightGreen || map.get(mapminx, mapminy) == lightGreen || map.get(mapmaxx, mapmaxy) == lightGreen) jump(8*height/10 - 100);
-  if (map.get(mapx, mapy) == darkGreen || map.get(mapminx, mapminy) == darkGreen || map.get(mapmaxx, mapmaxy) == darkGreen) jump(8*height/10 - 200);
-}
 
-void jump(float level) {
-  if (eyey < level) {
-    while (eyey < level - 1) eyey += 1;
-  } else if (eyey > level) {
-    while (eyey > level + 1) eyey -= 1;
+  PVector radius;
+  int mapx, mapy;
+  float interval = 20;
+  float charElevation = height + 100;
+  float pointElevation = baseLevel;
+  
+  for (int deg = 0; deg < 360; deg += 15) {
+    radius = new PVector(100, 0);
+    radius.rotate(radians(deg));
+    mapx = int(eyex + radius.x + 2000) / gridSize;
+    mapy = int(eyez + radius.y + 2000) / gridSize;
+    
+    color c = map.get(mapx, mapy);
+    if (colorsContain(nonCollisionColors, c)) {
+    pointElevation =  baseLevel - elevations.get(c);
+    }
+    
+    if (pointElevation < charElevation) charElevation = pointElevation;
   }
-  eyey = level;
+  
+  if (eyey < charElevation - interval) eyey += interval;
+  else if (eyey > charElevation + interval) eyey -= interval;
+  else if (eyey > charElevation - interval && eyey < charElevation + interval) eyey = charElevation;
 }
 
 boolean colorsContain(color[] array, color item) {

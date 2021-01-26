@@ -9,6 +9,7 @@ PImage map, hrMap;
 
 //camera variables
 float eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz;
+float baseLevel;
 
 //keyboard variables
 boolean wkey, akey, skey, dkey, spacekey;
@@ -78,8 +79,10 @@ void setup() {
     e.printStackTrace();
   }
   
+  baseLevel = 7.5*height/10;
+  
   eyex = width/2;
-  eyey = 8*height/10;
+  eyey = baseLevel;
   eyez = height/2 - 200;
   
   focusx = width/2;
@@ -91,8 +94,6 @@ void setup() {
   upz = 0;
   
   leftRightAngle = 3*PI/2;
-  
-  rbt.mouseMove(width/2, height/2);
   
   shotTimer = 0;
   threshold = 30;
@@ -126,7 +127,6 @@ void draw() {
   world.camera(eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz);
   
   move();
-  checkElevation();
   
   //drawAxis();
   //drawFloor(-sceneSize, sceneSize, height, gridSize);
