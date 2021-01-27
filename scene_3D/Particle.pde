@@ -26,7 +26,7 @@ class Particle extends GameObject {
   
   void act() {
     loc.add(vel);
-    vel.add(0, 1, 0);
+    vel.y += 1;
     if (t < 0) {
       lives = 0;
     }

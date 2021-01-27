@@ -5,7 +5,7 @@ Robot rbt;
 //map variables
 int sceneSize;
 int gridSize;
-PImage map, hrMap;
+PImage map, displayMap;
 
 //camera variables
 float eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz;
@@ -51,7 +51,7 @@ void setup() {
   sceneSize = 2000;
   gridSize = 100;
   map = loadImage("map4.png");
-  hrMap = loadImage("map5.png");
+  displayMap = loadImage("map5.png");
   
   gif = new ArrayList<PImage>();
   String gifDir = "Water";
@@ -121,7 +121,9 @@ void draw() {
   world.textureMode(NORMAL);
   world.background(0);
   //world.lights();
-  world.ambientLight(251, 252, 232, 2000, 0, 0);
+  //world.lightFalloff(1.5, 0.0, 0.0);
+  //world.ambientLight(251, 252, 232);
+  //world.pointLight(255, 255, 255, eyex, eyey, eyez);
   //world.directionalLight(251, 252, 232, -1, 2, -1);
   
   world.camera(eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz);
@@ -150,7 +152,7 @@ void draw() {
     shotTimer = 0;
   }
   shotTimer ++;
-  println(objects.size());
+  //println(objects.size());
   
   world.endDraw();
   image(world, 0, 0);
@@ -169,11 +171,7 @@ random ideas:
 - changing weather
     - from rain, snow, clear
     - have background color change with weather
-- improve changing elevation
-- improve particle generation
-- improve map
-- splashes when moving in water
-- play more with lighting
-- checkout noise function
+- play more with lighting (lightFalloff)
 - object-oriented grass or flowers
+- have stroke on game
 */

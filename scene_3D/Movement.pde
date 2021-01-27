@@ -216,6 +216,12 @@ void checkElevation() {
   if (eyey < charElevation - interval) eyey += interval;
   else if (eyey > charElevation + interval) eyey -= interval;
   else if (eyey > charElevation - interval && eyey < charElevation + interval) eyey = charElevation;
+  
+  if (charElevation == baseLevel - elevations.get(blue) && frameCount % 3 == 0) {
+    for (int i = 0; i < 5; i++) {
+      objects.add(new Splash());
+    }
+  }
 }
 
 boolean colorsContain(color[] array, color item) {

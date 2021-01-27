@@ -6,6 +6,7 @@ void crosshair() {
 }
 
 void miniMap(int x, int y) {
+  HUD.image(displayMap, x, y, 120, 120);
   
   int mapX = int(eyex + 2000)/gridSize;
   int mapY = int(eyez + 2000)/gridSize;
