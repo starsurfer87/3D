@@ -82,3 +82,20 @@ void generateTree(int x, int y, int level) {
     blockList.add(new Leaves(x*gridSize - sceneSize, height - (level + (treeHeight+2)*100), y*gridSize - sceneSize));
   }
 }
+
+void generateFlowers() {
+  float xoff = 0;
+  for (int x = 0; x < map.width; x++) {
+    float yoff = 0;
+    for (int y = 0; y < map.height; y++) {
+      color c = map.get(x, y);
+      float n = noise(xoff, yoff, 50);
+      //println(n);
+      if ((c == white || c == lightGreen || c == darkGreen) && n > 0.75) {
+        objects.add(new Flower(x, y, elevations.get(c)));
+      }
+      yoff += 0.3;
+    }
+    xoff += 0.3;
+  }
+}

@@ -18,7 +18,7 @@ boolean wkey, akey, skey, dkey, spacekey;
 float leftRightAngle, upDownAngle;
 
 //textures
-PImage diamond, dirt, grassSide, grass, oakLeaves, oakLogSide, oakLog, sand, stone;
+PImage diamond, dirt, grassSide, grass, oakLeaves, oakLogSide, oakLog, sand, stone, flower;
 ArrayList<PImage> gif;
 
 //color palette
@@ -71,6 +71,7 @@ void setup() {
   oakLog = loadImage("Oak_Log_Top.png");
   sand = loadImage("Sand.png");
   stone = loadImage("Stone_Bricks.png");
+  flower = loadImage("flower");
   
   try {
     rbt = new Robot();
@@ -100,7 +101,7 @@ void setup() {
   
   objects = new ArrayList<GameObject>();
   for (int i = 0 ; i < 100; i++) {
-    objects.add( new Snowflake() );
+    objects.add( new Rain() );
   }
   blockList = new ArrayList<Block>();
   
@@ -114,6 +115,7 @@ void setup() {
   elevations.put(black, 400);
   
   generateMap();
+  generateFlowers();
 }
 
 void draw() {
