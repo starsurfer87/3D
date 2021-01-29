@@ -10,7 +10,7 @@ class Splash extends GameObject {
     vel.setMag(10);
     size = 2;
     lives = 1;
-    c = #183DF4;
+    c = #3E61F3;
   }
   
   void act() {

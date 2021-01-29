@@ -29,10 +29,31 @@ color lightGreen = #B5E61D;
 color darkGreen = #22B14C;
 color brown = #804000;
 color yellow = #FFFF00;
+color cloudyGrey = #DAE2EA;
+color skyBlue = #D4F1FA;
 
 //canvases
 PGraphics world;
 PGraphics HUD;
+
+//lighting
+color lightingColor;
+
+//mode framework
+final int INTRO = 0;
+final int GAME = 1;
+final int PAUSE = 2;
+final int OPTIONS = 3;
+
+//other
+String[] catchphrases = {
+  "Why not take a swim?",
+  "Grow your own tree!",
+  "Flowers! Flowers! Flowers!",
+  "Have a garden snowball fight!",
+  "No need to pay for a landscape architect",
+  "I wonder what's over the wall?"
+};
 
 ArrayList<GameObject> objects;
 ArrayList<Block> blockList;
@@ -120,12 +141,20 @@ void setup() {
 
 void draw() {
   world.beginDraw();
+  world.colorMode(HSB);
   world.textureMode(NORMAL);
-  world.background(0);
+  world.background(skyBlue);
   //world.lights();
-  //world.lightFalloff(1.5, 0.0, 0.0);
-  //world.ambientLight(251, 252, 232);
-  //world.pointLight(255, 255, 255, eyex, eyey, eyez);
+  //lightingColor = #FFFCDE;
+  //world.lightFalloff(0.5, 0.0, 0.0);
+  //println(hue(lightingColor));
+  //println(saturation(lightingColor));
+  //println(brightness(lightingColor));
+  //world.ambientLight(hue(lightingColor), saturation(lightingColor), brightness(lightingColor), 0, 0, 0);
+  //world.colorMode(RGB);
+  //world.ambientLight(255, 255, 255);
+  //world.colorMode(HSB);
+  //world.pointLight(hue(lightingColor), saturation(lightingColor), brightness(lightingColor), eyex, eyey, eyez);
   //world.directionalLight(251, 252, 232, -1, 2, -1);
   
   world.camera(eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz);
@@ -174,6 +203,8 @@ random ideas:
     - from rain, snow, clear
     - have background color change with weather
 - play more with lighting (lightFalloff)
-- object-oriented grass or flowers
-- have stroke on game
+- options menu:
+    - weather select
+    - show map
+
 */

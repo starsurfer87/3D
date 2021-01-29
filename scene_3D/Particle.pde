@@ -18,7 +18,7 @@ class Particle extends GameObject {
     world.pushMatrix();
     world.translate(loc.x, loc.y, loc.z);
     world.fill(white, t);
-    world.stroke(200, t);
+    world.stroke(hue(c), saturation(c), brightness(c) - 30.0, t);
     world.box(size);
     world.popMatrix();
     t -= 7;

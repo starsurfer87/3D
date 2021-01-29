@@ -26,11 +26,9 @@ class GameObject {
     world.pushMatrix();
     world.translate(loc.x, loc.y, loc.z);
     world.fill(c);
-    colorMode(HSB);
-    float colorBrightness = brightness(c) - 20.0;
+    float colorBrightness = brightness(c) - 30.0;
     if (colorBrightness < 0.0) colorBrightness = 0.0;
-    world.stroke(hue(c), saturation(c), brightness(c) - 20.0);
-    colorMode(RGB);
+    world.stroke(hue(c), saturation(c), colorBrightness);
     world.box(size);
     world.popMatrix();
   }

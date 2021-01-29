@@ -15,7 +15,7 @@ class Rain extends GameObject {
     world.pushMatrix();
     world.translate(loc.x, loc.y, loc.z);
     world.fill(c);
-    world.stroke(200);
+    world.stroke(hue(c), saturation(c), brightness(c) - 30.0);
     world.box(size, size*2, size);
     world.popMatrix();
   }
