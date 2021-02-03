@@ -8,7 +8,6 @@ class Rain extends GameObject {
     lives = 1;
     speed = size*8;
     c = #183DF4;
-    println(brightness(c));
   }
   
   void show() {
@@ -23,8 +22,13 @@ class Rain extends GameObject {
   void act() {
     loc.y += speed;
     if (loc.y > height) {
-      loc.y = 0;
-      loc.x = random(-sceneSize, sceneSize);
+      if (weather == SNOW) {
+        lives = 0;
+        objects.add(new Snowflake());
+      } else {
+        loc.y = 0;
+        loc.x = random(-sceneSize, sceneSize);
+      }
     }
   }
 

@@ -11,6 +11,7 @@ void miniMap(int x, int y) {
   int mapX = int(eyex + 2000)/gridSize;
   int mapY = int(eyez + 2000)/gridSize;
   
+  HUD.textAlign(CORNER, CORNER);
   HUD.fill(255);
   HUD.textSize(20); 
   HUD.text("X: " + mapX, x, y+150);

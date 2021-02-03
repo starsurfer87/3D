@@ -20,8 +20,13 @@ class Snowflake extends GameObject {
     loc.z += (noise(xoff, yoff2) - 0.5)*5;
     xoff += 0.05;
     if (loc.y > height) {
-      loc.y = 0;
-      loc.x = random(-sceneSize, sceneSize);
+      if (weather == RAIN) {
+        lives = 0;
+        objects.add(new Rain());
+      } else {
+        loc.y = 0;
+        loc.x = random(-sceneSize, sceneSize);
+      }
     }
   }
 

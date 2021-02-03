@@ -31,6 +31,8 @@ color brown = #804000;
 color yellow = #FFFF00;
 color cloudyGrey = #DAE2EA;
 color skyBlue = #D4F1FA;
+color themeAccent = #698841;
+color themeBase = #60432E;
 
 //canvases
 PGraphics world;
@@ -39,13 +41,23 @@ PGraphics HUD;
 //lighting
 color lightingColor;
 
+//fonts
+PFont gameFont;
+
 //mode framework
+int mode;
 final int INTRO = 0;
 final int GAME = 1;
 final int PAUSE = 2;
 final int OPTIONS = 3;
 
+//weather
+int weather, weatherTimer;
+final int RAIN = 0;
+final int SNOW = 1;
+
 //other
+PImage introScreen;
 String[] catchphrases = {
   "Why not take a swim?",
   "Grow your own tree!",
@@ -68,6 +80,7 @@ void setup() {
   size(displayWidth, displayHeight, P2D);
   world = createGraphics(width, height, P3D);
   HUD = createGraphics(width, height, P2D);
+  mode = INTRO;
   
   sceneSize = 2000;
   gridSize = 100;
@@ -94,6 +107,10 @@ void setup() {
   stone = loadImage("Stone_Bricks.png");
   flower = loadImage("flower");
   
+  introScreen = loadImage("minecraft_landscape.png");
+  
+  gameFont = loadFont("PlayMeGamesReguler-150.vlw");
+  
   try {
     rbt = new Robot();
   }
@@ -103,6 +120,36 @@ void setup() {
   
   baseLevel = 7.5*height/10;
   
+  threshold = 30;
+  
+  objects = new ArrayList<GameObject>();
+  blockList = new ArrayList<Block>();
+  
+  elevations = new HashMap<Integer, Integer>();
+  elevations.put(blue, -70);
+  elevations.put(yellow, 0);
+  elevations.put(white, 0);
+  elevations.put(lightGreen, 100);
+  elevations.put(darkGreen, 200);
+  elevations.put(brown, 500);
+  elevations.put(black, 400);
+  
+  gameSetup();
+}
+
+void draw() {
+  if (mode == INTRO) {
+    intro();
+  } else if (mode == GAME) {
+    game();
+  } else if (mode == PAUSE) {
+    pause();
+  } else {
+    println("ERROR! Mode = " + mode);
+  }
+}
+
+void gameSetup() {
   eyex = width/2;
   eyey = baseLevel;
   eyez = height/2 - 200;
@@ -118,85 +165,22 @@ void setup() {
   leftRightAngle = 3*PI/2;
   
   shotTimer = 0;
-  threshold = 30;
-  
-  objects = new ArrayList<GameObject>();
-  for (int i = 0 ; i < 100; i++) {
-    objects.add( new Rain() );
-  }
-  blockList = new ArrayList<Block>();
-  
-  elevations = new HashMap<Integer, Integer>();
-  elevations.put(blue, -70);
-  elevations.put(yellow, 0);
-  elevations.put(white, 0);
-  elevations.put(lightGreen, 100);
-  elevations.put(darkGreen, 200);
-  elevations.put(brown, 500);
-  elevations.put(black, 400);
+  weatherTimer = 0;
+
+  weather = int(random(2));
+  if (weather == RAIN) {
+    for (int i = 0 ; i < 100; i++) {
+      objects.add( new Rain() );
+    }
+  } else if (weather == SNOW) {
+    for (int i = 0 ; i < 100; i++) {
+      objects.add( new Snowflake() );
+    }
+  } else println("error: no weather");
   
   generateMap();
   generateFlowers();
 }
-
-void draw() {
-  world.beginDraw();
-  world.colorMode(HSB);
-  world.textureMode(NORMAL);
-  world.background(skyBlue);
-  //world.lights();
-  //lightingColor = #FFFCDE;
-  //world.lightFalloff(0.5, 0.0, 0.0);
-  //println(hue(lightingColor));
-  //println(saturation(lightingColor));
-  //println(brightness(lightingColor));
-  //world.ambientLight(hue(lightingColor), saturation(lightingColor), brightness(lightingColor), 0, 0, 0);
-  //world.colorMode(RGB);
-  //world.ambientLight(255, 255, 255);
-  //world.colorMode(HSB);
-  //world.pointLight(hue(lightingColor), saturation(lightingColor), brightness(lightingColor), eyex, eyey, eyez);
-  //world.directionalLight(251, 252, 232, -1, 2, -1);
-  
-  world.camera(eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz);
-  
-  move();
-  
-  //drawAxis();
-  //drawFloor(-sceneSize, sceneSize, height, gridSize);
-  //drawFloor(-sceneSize, sceneSize, 0, gridSize);
-  showMap();
-  
-  int i = 0;
-  while (i < objects.size()) {
-    GameObject obj = objects.get(i);
-    obj.act();
-    obj.show();
-    if (obj.lives == 0) {
-      objects.remove(i);
-    } else {
-      i++;
-    }
-  }
-  
-  if (spacekey && shotTimer > threshold) {
-    objects.add(new Bullet());
-    shotTimer = 0;
-  }
-  shotTimer ++;
-  //println(objects.size());
-  
-  world.endDraw();
-  image(world, 0, 0);
-  
-  HUD.beginDraw();
-  HUD.clear();
-  crosshair();
-  miniMap(50, 50);
-  HUD.endDraw();
-  image(HUD, 0, 0);
-}
-
-
 /* 
 random ideas:
 - changing weather

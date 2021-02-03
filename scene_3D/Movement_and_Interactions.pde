@@ -60,7 +60,18 @@ void keyReleased() {
   if (key == 'a' || key == 'A') akey = false;
   if (key == 's' || key == 'S') skey = false;
   if (key == 'd' || key == 'D') dkey = false;
+  if (key == 'e' || key == 'E') mode = PAUSE;
   if (key == ' ') spacekey= false;
+}
+
+void mouseReleased() {
+  if (mode == INTRO) {
+    introClicks();
+  } else if (mode == GAME) {
+    gameClicks();
+  } else if (mode == PAUSE) {
+    pauseClicks();
+  }
 }
 
 boolean canMoveForward() {
