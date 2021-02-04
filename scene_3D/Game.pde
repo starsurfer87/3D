@@ -58,7 +58,7 @@ void game() {
   HUD.clear();
   crosshair();
   miniMap(50, 50);
-  HUD.text(weatherTimer, width/2, 100);
+  //HUD.text(weatherTimer, width/2, 100);
   HUD.endDraw();
   image(HUD, 0, 0);
 }

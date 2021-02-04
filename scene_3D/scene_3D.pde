@@ -49,7 +49,7 @@ int mode;
 final int INTRO = 0;
 final int GAME = 1;
 final int PAUSE = 2;
-final int OPTIONS = 3;
+final int INSTRUCTIONS = 3;
 
 //weather
 int weather, weatherTimer;
@@ -58,6 +58,8 @@ final int SNOW = 1;
 
 //other
 PImage introScreen;
+
+String phrase;
 String[] catchphrases = {
   "Why not take a swim?",
   "Grow your own tree!",
@@ -66,6 +68,7 @@ String[] catchphrases = {
   "No need to pay for a landscape architect",
   "I wonder what's over the wall?"
 };
+float textSize, textInc;
 
 ArrayList<GameObject> objects;
 ArrayList<Block> blockList;
@@ -144,12 +147,18 @@ void draw() {
     game();
   } else if (mode == PAUSE) {
     pause();
+  } else if (mode == INSTRUCTIONS) {
+    instructions();
   } else {
     println("ERROR! Mode = " + mode);
   }
 }
 
 void gameSetup() {
+  phrase = catchphrases[int(random(catchphrases.length))];
+  textSize = 50;
+  textInc = 0.1;
+  
   eyex = width/2;
   eyey = baseLevel;
   eyez = height/2 - 200;
@@ -190,5 +199,4 @@ random ideas:
 - options menu:
     - weather select
     - show map
-
 */
