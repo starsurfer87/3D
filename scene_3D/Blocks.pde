@@ -11,56 +11,56 @@ class Block {
   }
   
   void show() {
-    pushMatrix(); 
+    world.pushMatrix(); 
     
-    translate(x, y, z);
-    scale(size);
-    noStroke();
+    world.translate(x, y, z);
+    world.scale(size);
+    world.noStroke();
     
     //top
-    beginShape(QUADS);
-    texture(top);
+    world.beginShape(QUADS);
+    world.texture(top);
     //vertex(x, y, z, texture's x, texture's y)
-    vertex(0, 0, 0, 0, 0);
-    vertex(1, 0, 0, 1, 0);
-    vertex(1, 0, 1, 1, 1);
-    vertex(0, 0, 1, 0, 1);
-    endShape();
+    world.vertex(0, 0, 0, 0, 0);
+    world.vertex(1, 0, 0, 1, 0);
+    world.vertex(1, 0, 1, 1, 1);
+    world.vertex(0, 0, 1, 0, 1);
+    world.endShape();
     
     //bottom
-    beginShape(QUADS);
-    texture(bottom);
-    vertex(0, 1, 0, 0, 0);
-    vertex(1, 1, 0, 1, 0);
-    vertex(1, 1, 1, 1, 1);
-    vertex(0, 1, 1, 0, 1);
-    endShape();
+    world.beginShape(QUADS);
+    world.texture(bottom);
+    world.vertex(0, 1, 0, 0, 0);
+    world.vertex(1, 1, 0, 1, 0);
+    world.vertex(1, 1, 1, 1, 1);
+    world.vertex(0, 1, 1, 0, 1);
+    world.endShape();
     
-    beginShape(QUADS);
-    texture(side);
+    world.beginShape(QUADS);
+    world.texture(side);
     //front
-    vertex(0, 0, 1, 0, 0);
-    vertex(1, 0, 1, 1, 0);
-    vertex(1, 1, 1, 1, 1);
-    vertex(0, 1, 1, 0, 1);
+    world.vertex(0, 0, 1, 0, 0);
+    world.vertex(1, 0, 1, 1, 0);
+    world.vertex(1, 1, 1, 1, 1);
+    world.vertex(0, 1, 1, 0, 1);
     //back
-    vertex(0, 0, 0, 0, 0);
-    vertex(1, 0, 0, 1, 0);
-    vertex(1, 1, 0, 1, 1);
-    vertex(0, 1, 0, 0, 1);
+    world.vertex(0, 0, 0, 0, 0);
+    world.vertex(1, 0, 0, 1, 0);
+    world.vertex(1, 1, 0, 1, 1);
+    world.vertex(0, 1, 0, 0, 1);
     //left
-    vertex(0, 0, 0, 0, 0);
-    vertex(0, 0, 1, 1, 0);
-    vertex(0, 1, 1, 1, 1);
-    vertex(0, 1, 0, 0, 1);
+    world.vertex(0, 0, 0, 0, 0);
+    world.vertex(0, 0, 1, 1, 0);
+    world.vertex(0, 1, 1, 1, 1);
+    world.vertex(0, 1, 0, 0, 1);
     //right
-    vertex(1, 0, 0, 0, 0);
-    vertex(1, 0, 1, 1, 0);
-    vertex(1, 1, 1, 1, 1);
-    vertex(1, 1, 0, 0, 1);
-    endShape();
+    world.vertex(1, 0, 0, 0, 0);
+    world.vertex(1, 0, 1, 1, 0);
+    world.vertex(1, 1, 1, 1, 1);
+    world.vertex(1, 1, 0, 0, 1);
+    world.endShape();
     
-    popMatrix();
+    world.popMatrix();
   }
 }
 
@@ -140,47 +140,47 @@ class Water extends Block {
   }
   
   void show() {
-    pushMatrix(); 
+    world.pushMatrix(); 
       
-    translate(x, y, z);
-    scale(size);
-    noStroke();
+    world.translate(x, y, z);
+    world.scale(size);
+    world.noStroke();
     
-    beginShape(QUADS);
-    texture(gif.get(f));
+    world. beginShape(QUADS);
+    world.texture(gif.get(f));
     //top
-    vertex(0, 0, 0, 0, 0);
-    vertex(1, 0, 0, 1, 0);
-    vertex(1, 0, 1, 1, 1);
-    vertex(0, 0, 1, 0, 1);
+    world.vertex(0, 0, 0, 0, 0);
+    world.vertex(1, 0, 0, 1, 0);
+    world.vertex(1, 0, 1, 1, 1);
+    world.vertex(0, 0, 1, 0, 1);
     //bottom
-    vertex(0, 1, 0, 0, 0);
-    vertex(1, 1, 0, 1, 0);
-    vertex(1, 1, 1, 1, 1);
-    vertex(0, 1, 1, 0, 1);
+    world.vertex(0, 1, 0, 0, 0);
+    world.vertex(1, 1, 0, 1, 0);
+    world.vertex(1, 1, 1, 1, 1);
+    world.vertex(0, 1, 1, 0, 1);
     //front
-    vertex(0, 0, 1, 0, 0);
-    vertex(1, 0, 1, 1, 0);
-    vertex(1, 1, 1, 1, 1);
-    vertex(0, 1, 1, 0, 1);
+    world.vertex(0, 0, 1, 0, 0);
+    world.vertex(1, 0, 1, 1, 0);
+    world.vertex(1, 1, 1, 1, 1);
+    world.vertex(0, 1, 1, 0, 1);
     //back
-    vertex(0, 0, 0, 0, 0);
-    vertex(1, 0, 0, 1, 0);
-    vertex(1, 1, 0, 1, 1);
-    vertex(0, 1, 0, 0, 1);
+    world.vertex(0, 0, 0, 0, 0);
+    world.vertex(1, 0, 0, 1, 0);
+    world.vertex(1, 1, 0, 1, 1);
+    world.vertex(0, 1, 0, 0, 1);
     //left
-    vertex(0, 0, 0, 0, 0);
-    vertex(0, 0, 1, 1, 0);
-    vertex(0, 1, 1, 1, 1);
-    vertex(0, 1, 0, 0, 1);
+    world.vertex(0, 0, 0, 0, 0);
+    world.vertex(0, 0, 1, 1, 0);
+    world.vertex(0, 1, 1, 1, 1);
+    world.vertex(0, 1, 0, 0, 1);
     //right
-    vertex(1, 0, 0, 0, 0);
-    vertex(1, 0, 1, 1, 0);
-    vertex(1, 1, 1, 1, 1);
-    vertex(1, 1, 0, 0, 1);
-    endShape();
+    world.vertex(1, 0, 0, 0, 0);
+    world.vertex(1, 0, 1, 1, 0);
+    world.vertex(1, 1, 1, 1, 1);
+    world.vertex(1, 1, 0, 0, 1);
+    world.endShape();
     
-    popMatrix();
+    world.popMatrix();
     
     f ++;
     if (f == gif.size() - 1) f = 0;

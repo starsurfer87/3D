@@ -1,23 +1,23 @@
 void drawAxis() {
-  strokeWeight(2);
+  world.strokeWeight(2);
   //x-axis
-  stroke(255, 0, 0);
-  line(-sceneSize, 0, 0, sceneSize, 0, 0);
+  world.stroke(255, 0, 0);
+  world.line(-sceneSize, 0, 0, sceneSize, 0, 0);
   //y-axis
-  stroke(0, 255, 0);
-  line(0, 0, 0, 0, height, 0);
+  world.stroke(0, 255, 0);
+  world.line(0, 0, 0, 0, height, 0);
   //z-axis
-  stroke(0, 0, 255);
-  line(0, 0, -sceneSize, 0, 0, sceneSize);
+  world.stroke(0, 0, 255);
+  world.line(0, 0, -sceneSize, 0, 0, sceneSize);
 }
 
 void drawFloor(int start, int end, int level, int gap) {
   //line(x1, y1, z1, x2, y2, z2);
-  stroke(100);
-  strokeWeight(1);
+  world.stroke(100);
+  world.strokeWeight(1);
   for (int i = start; i <= end; i += gap) {
-    line(i, level, start, i, level, end);
-    line(start, level, i, end, level, i);
+    world.line(i, level, start, i, level, end);
+    world.line(start, level, i, end, level, i);
   }
 }
 
@@ -80,5 +80,22 @@ void generateTree(int x, int y, int level) {
   }
   if (random(2) < 1) {
     blockList.add(new Leaves(x*gridSize - sceneSize, height - (level + (treeHeight+2)*100), y*gridSize - sceneSize));
+  }
+}
+
+void generateFlowers() {
+  float xoff = 0;
+  for (int x = 0; x < map.width; x++) {
+    float yoff = 0;
+    for (int y = 0; y < map.height; y++) {
+      color c = map.get(x, y);
+      float n = noise(xoff, yoff, 50);
+      //println(n);
+      if ((c == white || c == lightGreen || c == darkGreen) && n > 0.75) {
+        objects.add(new Flower(x, y, elevations.get(c)));
+      }
+      yoff += 0.3;
+    }
+    xoff += 0.3;
   }
 }

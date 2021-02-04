@@ -5,19 +5,20 @@ Robot rbt;
 //map variables
 int sceneSize;
 int gridSize;
-PImage map;
+PImage map, displayMap;
 
 //camera variables
 float eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz;
+float baseLevel;
 
 //keyboard variables
-boolean wkey, akey, skey, dkey;
+boolean wkey, akey, skey, dkey, spacekey;
 
 //rotation varables
 float leftRightAngle, upDownAngle;
 
 //textures
-PImage diamond, dirt, grassSide, grass, oakLeaves, oakLogSide, oakLog, sand, stone;
+PImage diamond, dirt, grassSide, grass, oakLeaves, oakLogSide, oakLog, sand, stone, flower;
 ArrayList<PImage> gif;
 
 //color palette
@@ -28,19 +29,66 @@ color lightGreen = #B5E61D;
 color darkGreen = #22B14C;
 color brown = #804000;
 color yellow = #FFFF00;
+color cloudyGrey = #DAE2EA;
+color skyBlue = #D4F1FA;
+color themeAccent = #698841;
+color themeBase = #60432E;
 
+//canvases
+PGraphics world;
+PGraphics HUD;
 
-ArrayList<Snowflake> snowList;
+//lighting
+color lightingColor;
+
+//fonts
+PFont gameFont;
+
+//mode framework
+int mode;
+final int INTRO = 0;
+final int GAME = 1;
+final int PAUSE = 2;
+final int INSTRUCTIONS = 3;
+
+//weather
+int weather, weatherTimer;
+final int RAIN = 0;
+final int SNOW = 1;
+
+//other
+PImage introScreen;
+
+String phrase;
+String[] catchphrases = {
+  "Why not take a swim?",
+  "Grow your own tree!",
+  "Flowers! Flowers! Flowers!",
+  "Have a garden snowball fight!",
+  "No need to pay for a landscape architect",
+  "I wonder what's over the wall?"
+};
+float textSize, textInc;
+
+ArrayList<GameObject> objects;
 ArrayList<Block> blockList;
+
+color[] nonCollisionColors = {white, blue, lightGreen, darkGreen, yellow};
+HashMap<Integer, Integer> elevations;
+
+int shotTimer, threshold;
 
 
 void setup() {
-  size(displayWidth, displayHeight, P3D);
-  textureMode(NORMAL);
+  size(displayWidth, displayHeight, P2D);
+  world = createGraphics(width, height, P3D);
+  HUD = createGraphics(width, height, P2D);
+  mode = INTRO;
   
   sceneSize = 2000;
   gridSize = 100;
   map = loadImage("map4.png");
+  displayMap = loadImage("map5.png");
   
   gif = new ArrayList<PImage>();
   String gifDir = "Water";
@@ -55,11 +103,16 @@ void setup() {
   dirt = loadImage("Dirt_(texture)_JE2_BE2.png");
   grass = loadImage("Grass_Block_Top_C.png");
   grassSide = loadImage("Grass_Block_Side.png");
-  oakLeaves = loadImage("Oak_Leaves.png");
+  oakLeaves = loadImage("Oak_Leaves_C.png");
   oakLogSide = loadImage("Oak_Log_Side.png");
   oakLog = loadImage("Oak_Log_Top.png");
   sand = loadImage("Sand.png");
   stone = loadImage("Stone_Bricks.png");
+  flower = loadImage("flower");
+  
+  introScreen = loadImage("minecraft_landscape.png");
+  
+  gameFont = loadFont("PlayMeGamesReguler-150.vlw");
   
   try {
     rbt = new Robot();
@@ -68,13 +121,51 @@ void setup() {
     e.printStackTrace();
   }
   
+  baseLevel = 7.5*height/10;
+  
+  threshold = 30;
+  
+  objects = new ArrayList<GameObject>();
+  blockList = new ArrayList<Block>();
+  
+  elevations = new HashMap<Integer, Integer>();
+  elevations.put(blue, -70);
+  elevations.put(yellow, 0);
+  elevations.put(white, 0);
+  elevations.put(lightGreen, 100);
+  elevations.put(darkGreen, 200);
+  elevations.put(brown, 500);
+  elevations.put(black, 400);
+  
+  gameSetup();
+}
+
+void draw() {
+  if (mode == INTRO) {
+    intro();
+  } else if (mode == GAME) {
+    game();
+  } else if (mode == PAUSE) {
+    pause();
+  } else if (mode == INSTRUCTIONS) {
+    instructions();
+  } else {
+    println("ERROR! Mode = " + mode);
+  }
+}
+
+void gameSetup() {
+  phrase = catchphrases[int(random(catchphrases.length))];
+  textSize = 50;
+  textInc = 0.1;
+  
   eyex = width/2;
-  eyey = 8*height/10;
-  eyez = height/2;
+  eyey = baseLevel;
+  eyez = height/2 - 200;
   
   focusx = width/2;
   focusy = height/2;
-  focusz = height/2 - 100;
+  focusz = height/2 - 300;
   
   upx = 0;
   upy = 1;
@@ -82,224 +173,30 @@ void setup() {
   
   leftRightAngle = 3*PI/2;
   
-  rbt.mouseMove(width/2, height/2);
-  
-  snowList = new ArrayList<Snowflake>();
-  for (int i = 0 ; i < 100; i++) {
-    snowList.add( new Snowflake() );
-  }
-  blockList = new ArrayList<Block>();
+  shotTimer = 0;
+  weatherTimer = 0;
+
+  weather = int(random(2));
+  if (weather == RAIN) {
+    for (int i = 0 ; i < 100; i++) {
+      objects.add( new Rain() );
+    }
+  } else if (weather == SNOW) {
+    for (int i = 0 ; i < 100; i++) {
+      objects.add( new Snowflake() );
+    }
+  } else println("error: no weather");
   
   generateMap();
-}
-
-void draw() {
-  background(0);
-  //lights();
-  ambientLight(251, 252, 232, 2000, 0, 0);
-  //directionalLight(251, 252, 232, -1, 2, -1);
-  
-  camera(eyex, eyey, eyez, focusx, focusy, focusz, upx, upy, upz);
-  
-  move();
-  
-  drawAxis();
-  //drawFloor(-sceneSize, sceneSize, height, gridSize);
-  //drawFloor(-sceneSize, sceneSize, 0, gridSize);
-  showMap();
-  
-  for (int i = 0 ; i < 100; i++) {
-    Snowflake mySnowflake = snowList.get(i);
-    mySnowflake.act();
-    mySnowflake.show();
-  } 
-  
-}
-
-void move() {
-  
-  pushMatrix();
-  translate(focusx, focusy, focusz);
-  sphere(3);
-  popMatrix();
-  
-  if (wkey && canMoveForward()) {
-    eyex += cos(leftRightAngle)*10;
-    eyez += sin(leftRightAngle)*10;
-  }
-  if (skey && canMoveBackward()) {
-    eyex -= cos(leftRightAngle)*10;
-    eyez -= sin(leftRightAngle)*10;
-  }
-  if (dkey && canMoveRight()) {
-    eyex += cos(leftRightAngle + PI/2)*10;
-    eyez += sin(leftRightAngle + PI/2)*10;
-  }
-  if (akey && canMoveLeft()) {
-    eyex -= cos(leftRightAngle + PI/2)*10;
-    eyez -= sin(leftRightAngle + PI/2)*10;
-  }
-  
-  focusx = eyex + cos(leftRightAngle)*100;
-  focusy = eyey + tan(upDownAngle)*100;
-  focusz = eyez + sin(leftRightAngle)*100;
-
-  leftRightAngle += (mouseX - pmouseX)*0.01;
-  upDownAngle += (mouseY - pmouseY)*0.01;
-  
-  if (upDownAngle > radians(85)) upDownAngle = radians(85);
-  if (upDownAngle < -radians(85)) upDownAngle = -radians(85);
-  
-  if (mouseX > width-2) rbt.mouseMove(3, mouseY);
-  if (mouseX < 2) rbt.mouseMove(width - 3, mouseY);
-}
-
-void keyPressed() {
-  if (key == 'w' || key == 'W') wkey = true;
-  if (key == 'a' || key == 'A') akey = true;
-  if (key == 's' || key == 'S') skey = true;
-  if (key == 'd' || key == 'D') dkey = true;
-}
-
-void keyReleased() {
-  if (key == 'w' || key == 'W') wkey = false;
-  if (key == 'a' || key == 'A') akey = false;
-  if (key == 's' || key == 'S') skey = false;
-  if (key == 'd' || key == 'D') dkey = false;
-}
-
-boolean canMoveForward() {
-  float fwdx, fwdy, fwdz;
-  float minx, miny, minz;
-  float maxx, maxy, maxz;
-  int mapx, mapy, mapminx, mapminy, mapmaxx, mapmaxy;
-  
-  fwdx = eyex + cos(leftRightAngle)*200;
-  fwdy = eyey;
-  fwdz = eyez + sin(leftRightAngle)*200;
-  mapx = int(fwdx + 2000) / gridSize;
-  mapy = int(fwdz + 2000) / gridSize;
-  
-  minx = eyex + cos(leftRightAngle - radians(30))*150;
-  miny = eyey;
-  minz = eyez + sin(leftRightAngle - radians(30))*150;
-  mapminx = int(minx + 2000) / gridSize;
-  mapminy = int(minz + 2000) / gridSize;
-  
-  maxx = eyex + cos(leftRightAngle + radians(30))*150;
-  maxy = eyey;
-  maxz = eyez + sin(leftRightAngle + radians(30))*150;
-  mapmaxx = int(maxx + 2000) / gridSize;
-  mapmaxy = int(maxz + 2000) / gridSize;
-  
-  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
-    return true;
-  } else {
-    return false;
-  }
-    
-}
-
-boolean canMoveBackward() {
-  float backx, backy, backz;
-  float minx, miny, minz;
-  float maxx, maxy, maxz;
-  int mapx, mapy, mapminx, mapminy, mapmaxx, mapmaxy;
-  
-  backx = eyex - cos(leftRightAngle)*200;
-  backy = eyey;
-  backz = eyez - sin(leftRightAngle)*200;
-  mapx = int(backx + 2000) / gridSize;
-  mapy = int(backz + 2000) / gridSize;
-  
-  minx = eyex - cos(leftRightAngle - radians(30))*200;
-  miny = eyey;
-  minz = eyez - sin(leftRightAngle - radians(30))*200;
-  mapminx = int(minx + 2000) / gridSize;
-  mapminy = int(minz + 2000) / gridSize;
-  
-  maxx = eyex - cos(leftRightAngle + radians(30))*200;
-  maxy = eyey;
-  maxz = eyez - sin(leftRightAngle + radians(30))*200;
-  mapmaxx = int(maxx + 2000) / gridSize;
-  mapmaxy = int(maxz + 2000) / gridSize;
-  
-  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
-    return true;
-  } else {
-    return false;
-  }
-    
-}
-
-boolean canMoveRight() {
-  float rightx, righty, rightz;
-  float minx, miny, minz;
-  float maxx, maxy, maxz;
-  int mapx, mapy, mapminx, mapminy, mapmaxx, mapmaxy;
-  
-  rightx = eyex + cos(leftRightAngle + PI/2)*200;
-  righty = eyey;
-  rightz = eyez + sin(leftRightAngle + PI/2)*200;
-  mapx = int(rightx + 2000) / gridSize;
-  mapy = int(rightz + 2000) / gridSize;
-  
-  minx = eyex + cos(leftRightAngle + PI/2 - radians(30))*200;
-  miny = eyey;
-  minz = eyez + sin(leftRightAngle + PI/2 - radians(30))*200;
-  mapminx = int(minx + 2000) / gridSize;
-  mapminy = int(minz + 2000) / gridSize;
-  
-  maxx = eyex + cos(leftRightAngle + PI/2 + radians(30))*200;
-  maxy = eyey;
-  maxz = eyez + sin(leftRightAngle + PI/2 + radians(30))*200;
-  mapmaxx = int(maxx + 2000) / gridSize;
-  mapmaxy = int(maxz + 2000) / gridSize;
-  
-  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
-    return true;
-  } else {
-    return false;
-  }
-    
-}
-
-boolean canMoveLeft() {
-  float backx, backy, backz;
-  float minx, miny, minz;
-  float maxx, maxy, maxz;
-  int mapx, mapy, mapminx, mapminy, mapmaxx, mapmaxy;
-  
-  backx = eyex - cos(leftRightAngle + PI/2)*200;
-  backy = eyey;
-  backz = eyez - sin(leftRightAngle + PI/2)*200;
-  mapx = int(backx + 2000) / gridSize;
-  mapy = int(backz + 2000) / gridSize;
-  
-  minx = eyex - cos(leftRightAngle + PI/2 - radians(30))*200;
-  miny = eyey;
-  minz = eyez - sin(leftRightAngle + PI/2 - radians(30))*200;
-  mapminx = int(minx + 2000) / gridSize;
-  mapminy = int(minz + 2000) / gridSize;
-  
-  maxx = eyex - cos(leftRightAngle + PI/2 + radians(30))*200;
-  maxy = eyey;
-  maxz = eyez - sin(leftRightAngle + PI/2 + radians(30))*200;
-  mapmaxx = int(maxx + 2000) / gridSize;
-  mapmaxy = int(maxz + 2000) / gridSize;
-  
-  if (map.get(mapx, mapy) == white && map.get(mapminx, mapminy) == white && map.get(mapmaxx, mapmaxy) == white) {
-    return true;
-  } else {
-    return false;
-  }
-    
+  generateFlowers();
 }
 /* 
 random ideas:
 - changing weather
     - from rain, snow, clear
     - have background color change with weather
-- randomly generated lakes or trees
-- walking up one block difference
+- play more with lighting (lightFalloff)
+- options menu:
+    - weather select
+    - show map
 */
